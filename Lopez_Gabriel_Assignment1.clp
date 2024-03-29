@@ -9,7 +9,8 @@
 ;define template
 (deftemplate path
     (multislot nodes)
-    (slot cost))
+    (slot cost)
+)
 
 ;the fact base
 (deffacts direct-paths
@@ -17,14 +18,16 @@
     (path (nodes B C) (cost 5))
     (path (nodes B D) (cost 8))
     (path (nodes D E) (cost 6))
-    (path (nodes E F) (cost 7)))
+    (path (nodes E F) (cost 7))
+)
 
 ;the knwoledge base
 (defrule indirect-paths
     (path (nodes $?begin ?temp1 $?temp2))
     (path (nodes ?temp1 $?temp2 $?end))
     =>
-    (assert (path (nodes $?begin ?temp1 $?temp2 $?end))))
+    (assert (path (nodes $?begin ?temp1 $?temp2 $?end)))
+)
 
 (defrule calculateCosts
     (path (nodes $?nodes) (cost ?cost))
@@ -44,7 +47,26 @@
     (modify ?facts (nodes $?nodes) (cost ?newCost))
 )
 
+(defrule find-shortest-path
+    (path (nodes $?nodes) (cost ?cost))
+    =>
+    (if (eq ?cost (min-cost))
+        then (printout t "Shortest path found: " $?nodes " with cost " ?cost crlf)
+    )
+)
+
+(deffunction get-cost (?from ?to)
+    (find-all-facts ((?f path)) (and (eq ?f:nodes (create$ ?from ?to)) (eq ?f:cost ?cost)) TRUE)
+    ?cost
+)
+
+(deffunction min-cost ()
+    (find-all-facts ((?f path)) (eq ?f:cost ?cost) TRUE)
+    (min ?cost)
+)
+
 (defrule print-paths
     (path (nodes $?nodes))
     =>
-    (printout t "Path: " $?nodes crlf))
+    (printout t "Path: " $?nodes crlf)
+)
