@@ -21,16 +21,19 @@
     (path (nodes E F) (cost 7))
 )
 
-;the knwoledge base
+; Indirect Paths Rule
 (defrule indirect-paths
-(path (nodes $?begin ?temp) (cost ?cost1))
-(path (nodes ?temp $?end) (cost ?cost2))
-=>
-(assert (path (nodes $?begin ?temp $?end) (cost (+ ?cost1 ?cost2) ))))
-
-(defrule print-paths
-    (path (nodes $?nodes) (cost ?cost))
+    (path (nodes $?begin $?temp1 $?temp2))
+    (path (nodes $?temp1 $?temp2 $?end))
     =>
-    (printout t "Path: " $?nodes " Cost: " ?cost crlf)
+    (assert (path (nodes $?begin $?temp1 $?temp2 $?end)))
 )
 
+
+
+; Print Paths Rule
+(defrule print-paths
+    (path (nodes $?nodes))
+    =>
+    (printout t "Path: " $?nodes crlf)
+)
