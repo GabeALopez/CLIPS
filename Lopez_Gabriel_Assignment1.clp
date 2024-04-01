@@ -14,11 +14,11 @@
 
 ; The fact base
 (deffacts direct-paths
-    (path (nodes A B) (cost 10))
-    (path (nodes B C) (cost 5))
-    (path (nodes B D) (cost 8))
-    (path (nodes D E) (cost 6))
-    (path (nodes E F) (cost 7))
+    (path (nodes E A) (cost 1))
+    (path (nodes A B) (cost 5))
+    (path (nodes A C) (cost 1))
+    (path (nodes C B) (cost 1))
+    (path (nodes B D) (cost 1))
 )
 
 ;the knwoledge base
